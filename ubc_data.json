@@ -1,0 +1,4 @@
+{"CPSC 100": {"units": "Units: 3", "hours": "3-1-0", "subject": "CPSC 100", "name": "Computational Thinking", "prereqs": null, "coreqs": null, "url": "https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-course&dept=CPSC&course=100"},
+"CPSC 103": {"units": "Units: 3", "hours": "3-1-0", "subject": "CPSC 103", "name": "Introduction to Systematic Program Design", "prereqs": null, "coreqs": null, "url": "https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-course&dept=CPSC&course=103"},
+"CPSC 107": {}
+}
