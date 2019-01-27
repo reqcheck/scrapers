@@ -3,6 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 import csv
 import re
+import json
 
 def page_scrape(all_urls, info_dict):
     iter_urls = iter(all_urls)
@@ -26,26 +27,24 @@ def page_scrape(all_urls, info_dict):
             hours = soup.select('h3.hours')[0].text.strip()
             course_dict['hours'] = hours
 
-        prereq_list = ['None']
+        prereq_list = None
         for ultag in soup.find_all('ul', {'class': 'prereq'}):
             for litag in ultag.find_all('li'):
                 if litag.find('a') is not None:
-                    find_all_a = litag.find_all('a')
-                    text_list = ['None']
-                    for pre in find_all_a:
-                        text_list.append(pre.contents[0])
-                    del text_list[0]
-                    prereq_list.append(text_list)
-            del prereq_list[0]
+                    prereq_list = ['None']
+                    courses = re.findall("[A-Z]{2,4}\s\d\d\d\w?", litag.text)
+                    prereq_list.append(courses)
+                    del prereq_list[0]
         course_dict['prereqs'] = prereq_list
 
-        coreq_list = ['None']
+        coreq_list = None
         for ultag in soup.find_all('ul', {'class': 'precoreq'}):
             for litag in ultag.find_all('li'):
                 if litag.find('a') is not None:
+                    coreq_list = ['None']
                     courses = re.findall("[A-Z]{2,4}\s\d\d\d\w?", litag.text)
                     coreq_list.append(courses)
-            del coreq_list[0]
+                    del coreq_list[0]
         course_dict['coreqs'] = coreq_list
 
         course_dict['url'] = url
@@ -86,10 +85,12 @@ def main():
     #Use the subject area list to produce lists of all course URLS
     all_urls = subject_area_courses_scrape(subject_areas)
     #top5 = all_urls[:5]
-    #top5 = [None, 'https://web.uvic.ca/calendar2019-01/CDs/ECE/299.html']
+    #top5 = [None, 'https://web.uvic.ca/calendar2019-01/CDs/ENGL/427.html']
     info_dict = {}
     page_scrape(all_urls, info_dict)
     print(info_dict)
+    with open('data.json', 'w') as outfile:
+        json.dump(info_dict, outfile)
 
 if __name__== "__main__":
   main()
